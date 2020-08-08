@@ -12,6 +12,7 @@
         $saldo = $_SESSION['saldo']; 
         $email = $_SESSION['email']; 
         $rek = $_SESSION['rek'];
+        $bankcode = $_SESSION['bankcode'];
     }
 
 ?>
@@ -152,13 +153,16 @@
                         <li class="detail-data" style="border-bottom: 0.2em solid #FAF6F5;">
                             <h6 class="font-18 mb-0 text-capitalize">Rek num.  <span class="float-sm-right"><b class="font-weight-500"><?php echo $rek ?></b></span></h6>
                         </li>
+                        <li class="detail-data" style="border-bottom: 0.2em solid #FAF6F5;">
+                            <h6 class="font-18 mb-0 text-capitalize">Bank code  <span class="float-sm-right"><b class="font-weight-900"> <?php echo $bankcode ?></b>&nbsp;<?php echo $rek ?></span></h6>
+                        </li>
                         
                     </ul>
                 </div>
             </div>
             <div class="col-lg-6 col-md-12 p-0">
                 <div class="hover-effect">
-                    <img alt="about" src="<?php echo BASE_URL.'images/muka.jpg' ?>" class="about-img">
+                    <img alt="about" src="<?php echo BASE_URL.'images/muka.jpg' ?>" class="about-img style="width:961px; height:956px; object-fit:cover"">
                 </div>
             </div>
         </div>
@@ -190,7 +194,7 @@
                         
                         <input  maxlength="10" class="form-control" type="text" name="amount" placeholder="Balance amount" required="">
                         <div class="form-button mt-40px">
-                            <button type="submit" class="btn-setting btn-hvr-setting-main btn-white btn-hvr text-uppercase" >Transfer
+                            <button type="submit" style="background-color:#E2D7D5 !important;" class="btn-setting btn-hvr-setting-main btn-white btn-hvr text-uppercase" >Transfer
                                 <span class="btn-hvr-setting btn-hvr-black">
                                      <span class="btn-hvr-setting-inner">
                                      <span class="btn-hvr-effect"></span>

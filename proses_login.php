@@ -52,10 +52,11 @@ include_once("function/koneksi.php");
                         <?php
 
                         $hasil_hash = $_POST['hasil_hash'];
-                        $query = mysqli_query($koneksi, "SELECT * FROM user WHERE hash='$hasil_hash'");
+                        $pin = $_POST['password'];
+                        $query = mysqli_query($koneksi, "SELECT * FROM user WHERE hash='$hasil_hash' AND pin='$pin'");
 
                         if (mysqli_num_rows($query) == 0 ) {
-                            ?><script> alert("Maaf, Kartu tidak terdaftar. Silahkan Registrasi.");</script> 
+                            ?><script> alert("Maaf, Kartu tidak terdaftar atau pin salah. Silahkan Registrasi.");</script> 
                             <?php
                             header('Refresh: 0.001; URL=http://localhost/newATM/index.php');
                         }else {
@@ -69,6 +70,7 @@ include_once("function/koneksi.php");
                             $_SESSION['saldo'] = $baris['saldo'];
                             $_SESSION['email'] = $baris['email'];
                             $_SESSION['rek'] = $baris['rekening'];
+                            $_SESSION['bankcode'] = $baris['bankcode'];
         
                             ?><script> alert("Selamat, Kartu anda terdaftar");</script> 
                             <?php

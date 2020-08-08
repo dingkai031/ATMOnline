@@ -101,7 +101,10 @@
                             <label for="hash">Hash</label>
                             <input type="text" id="hash" name="hasil_hash" />
                         </div>
-                        <!--<input class="form-control" type="password" name="password" placeholder="Pin" required=""> -->
+                        <div style="margin-top:1em !important;">
+                            <input  type="password" name="password" placeholder="Pin" required="" maxlength="6" style="width:5em !important">
+                        </div>
+                        
                         <div class="form-button mt-40px">
                             <button type="submit" class="btn-setting btn-hvr-setting-main btn-yellow btn-hvr text-uppercase" id="submit_btn">Login
                                 <span class="btn-hvr-setting btn-hvr-pink">
