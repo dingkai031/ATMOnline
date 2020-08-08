@@ -24,8 +24,11 @@
         $rek_tujuan = $_POST['rek'];
         $bal = $_POST['amount'];
 
+        $sanksi = 2500;
+
         $query_bankcode = mysqli_query($koneksi, "SELECT * FROM bank WHERE bankcode='$bank_code_tujuan'");
         $query_rek = mysqli_query($koneksi, "SELECT * FROM user WHERE bankcode='$bank_code_tujuan' AND rekening='$rek_tujuan'");
+        $querypemilik = mysqli_query($koneksi, "SELECT * FROM user WHERE name='$nama'");
 
         if (mysqli_num_rows($query_bankcode) == 0 ) {
             $bankcode_error = 'Sorry, bankcode is not valid';
@@ -38,16 +41,45 @@
         if ($saldo<=$bal) {
             $saldo_error = 'Sorry, your balance is not sufficient';
         }
+        if (mysqli_num_rows($query_bankcode) >= 0 ) {
+            if ($rek != $rek_tujuan and mysqli_num_rows($query_rek) >= 0) {
+                if ($saldo>$bal) {
+                    if ($bankcode != $bank_code_tujuan) {
+                        $bal = $bal + $sanksi;
+                    }
+                    $pemilik = mysqli_fetch_assoc($querypemilik);
+                    $akuntujuan = mysqli_fetch_assoc($query_rek);
+                    $namatujuan = $akuntujuan['name'];
+                    $idtujuan = $akuntujuan['user_id'];
+                    $tanggal = date("Y-m-d H:i");
+    
+                    $saldopemilikakhir = $pemilik['saldo'] - $bal ;
+                    $saldotujuanakhir = $akuntujuan['saldo'] + $bal;
+
+                    $nominalmutasinambah = "+ ".$bal;
+                    $nominalmutasingurang = "- ".$bal;
+                    $ketberkurang = "Transfer to ".$namatujuan;
+                    $ketbertambah = "Received from ".$nama;
+
+                    if (mysqli_query($koneksi, "UPDATE user SET saldo='$saldopemilikakhir' WHERE name='$nama'") && mysqli_query($koneksi, "UPDATE user SET saldo='$saldotujuanakhir' WHERE name='$namatujuan'")){
+                        mysqli_query($koneksi, "INSERT INTO transaksi (mutasi, waktu_tanggal, user_id, tujuan ) VALUES ('$nominalmutasingurang','$tanggal', '$user_id', '$ketberkurang')");
+                        mysqli_query($koneksi, "INSERT INTO transaksi (mutasi, waktu_tanggal, user_id, tujuan ) VALUES ('$nominalmutasinambah','$tanggal', '$idtujuan', '$ketbertambah')");
+                        $_SESSION['saldo'] = $saldopemilikakhir;
+                        ?><script> alert("Transfer succedd");</script> 
+                        <?php
+                        header('Refresh: 0;');
+                    }
+                }
+                
+            }
+        }
     }
 ?>
 
 <?php 
     $query_nama_bank = mysqli_query($koneksi, "SELECT * FROM bank WHERE bankcode='$bankcode';");
     $row = mysqli_fetch_assoc($query_nama_bank);
-
-    $nama_bank = $row['name'];
-
-    echo $nama_bank;
+    $link = $row['link'];    
 ?>
 
 
@@ -160,7 +192,7 @@
                     <div class="main-title mb-5 text-md-left wow fadeIn" data-wow-delay="300ms">
                         <h2 class="text-initial"> Personal Information</h2>
                     </div>
-                   <ul class="text-left">
+                   <ul class="text-left wow fadeInRight">
                         <li class="detail-data" style="border-bottom: 0.2em solid #FAF6F5;">
                             <h6 class="font-18 mb-0 text-capitalize">Name  <span class="float-sm-right"><b class="font-weight-500"><?php echo $nama ?></b></span></h6>
                         </li>
@@ -177,15 +209,15 @@
                             <h6 class="font-18 mb-0 text-capitalize">Bank code  <span class="float-sm-right"><b class="font-weight-900"> <?php echo $bankcode ?></b>&nbsp;<?php echo $rek ?></span></h6>
                         </li>
                         <li class="detail-data">
-                            <img class=" <?php echo $nama_bank ?> &nbsp; float-sm-right"   >
+                            <img class="float-sm-right" src="<?php echo $link ?>" style="width:128p;height:92px;object-fit:cover">
                         </li>
                         
                     </ul>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-12 p-0">
+            <div class="col-lg-6 col-md-12 p-0 ">
                 <div class="hover-effect">
-                    <img alt="about" src="<?php echo BASE_URL.'images/muka.jpg' ?>" class="about-img style="width:961px; height:956px; object-fit:cover"">
+                    <img alt="about" src="<?php echo BASE_URL.'images/muka.jpg' ?>" class="about-img wow fadeInLeft" style="width:961px; height:956px; object-fit:cover">
                 </div>
             </div>
         </div>
@@ -200,16 +232,16 @@
         <div class="row align-items-center">
             <div class="col-lg-6">
                 <div class="login-content">
-                    <div class="main-title d-inline-block mb-4  text-md-left">
+                    <div class="main-title d-inline-block mb-4  text-md-left wow fadeInDown">
                         <h2 class="mb-3 color-black">Transfer.</h2>
                     </div>
 
                     <!--form-->
-                    <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="post" >
+                    <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="post" class="wow fadeInLeft" >
                         <div class="row">
                             <div class="col-4">
                                 <input maxlength="3"  class="form-control" type="text" name="bank_code" placeholder="Bank Code" required="" value="<?php 
-                                    if (isset($_POST['transfer'])) {if(!isset($bank_error)) { echo $bank_code_tujuan;}}   
+                                    if (isset($_POST['transfer'])) {if(!isset($bankcode_error)) { echo $bank_code_tujuan;}}   
                                 ?>">
                                 <?php if(isset($bankcode_error)): ?>
                                     <span style="color:#ff1637 !important;font-size:14px;"><?php echo $bankcode_error; ?></span>
@@ -249,8 +281,10 @@
                 </div>
             </div>
             <div class="col-lg-6 d-none d-lg-block p-0">
-                <!--Feature Image Half-->
-                <img src="images/transaksi.jpg" class="about-img" alt="image" style="width:961px; height:956px; object-fit:cover" >
+                <div class="hover-effect">
+                    <img src="images/transaksi.jpg" class="about-img wow fadeInRight" alt="image" style="width:961px; height:956px; object-fit:cover" >
+                </div>
+                
             </div>
         </div>
 
@@ -259,7 +293,7 @@
     </section>
     <!-- Team ends -->
 
-    <!-- Work Starts -->
+    <!-- transaction Starts -->
     <section id="transaction" class="bg-light-gray pb-0">
         <div class="container-fluid">
             <div class="row">
@@ -413,7 +447,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="main-title wow fadeIn" data-wow-delay="300ms">
+                    <div class="main-title wow rotateInDownLeft" data-wow-delay="300ms">
                         <h5> We have flexible pricing </h5>
                         <h2> Awaza's Packages</h2>
                         <p>Curabitur mollis bibendum luctus. Duis suscipit vitae dui sed suscipit. Vestibulum auctor nunc vitae diam eleifend, in maximus metus sollicitudin. Quisque vitae sodales lectus. Nam porttitor justo sed mi finibus, vel tristique risus faucibus.</p>
