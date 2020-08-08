@@ -1,12 +1,18 @@
 <?php 
-
+    session_start();
     include_once("function/helper.php");
     $page = isset($_GET['page']) ? $_GET['page'] : false;
 
     $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : false;
 
-    if (!isset($_SESSION['user_id'])){
+    if (!$user_id){
         header('Refresh: 0.001; URL=http://localhost/newATM/index.php');
+    }else {
+        $nama = $_SESSION['nama'];
+        $level = $_SESSION['level']; 
+        $saldo = $_SESSION['saldo']; 
+        $email = $_SESSION['email']; 
+        $rek = $_SESSION['rek'];
     }
 
 ?>
@@ -98,76 +104,14 @@
                         </li>
                     </ul>
                 </div>
-                <div class="header-social d-none d-lg-inline-block">
-                    <a href="javascript:void(0)" class="facebook-text-hvr"><i class="ti ti-facebook" aria-hidden="true"></i></a>
-                    <a href="javascript:void(0)" class="twitter-text-hvr"><i class="ti ti-twitter-alt" aria-hidden="true"></i></a>
-                    <a href="javascript:void(0)" class="linkedin-text-hvr"><i class="ti ti-linkedin" aria-hidden="true"></i></a>
-                </div>
                 <!-- side menu open button -->
-                <a class="menu_bars d-inline-block menu-bars-setting">
-                    <span></span>  <span></span>  <span></span> </a>
+                <button type="button" class="btn btn-dark">
+                    <a href="#pricing" style="color:#ffffff !important">Logout</a>
+                </button>
             </div>
         </nav>
     </header>
-    <!-- Header end -->
-
-    <!--Full Menu -->
-    <section class="overlay-menu fullscreen center-block">
-    <h2 class="d-none">heading</h2>
-    <div class="quarter-circle">
-        <div class="menu_bars2 active"> <span></span> <span></span> <span></span> </div>
-    </div>
-    <span class="overlay-effect"></span>
-    <div class="centered">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-12 text-center">
-                    <a href="index.html" class="logo-full mb-5 mb-xs-2rem"><img src="images/side-logo-black.png" alt=""></a>
-                </div>
-                <div class="col-md-12 text-left mt-5 mb-5">
-                    <ul class="side-nav-content heading_space">
-                        <li class="full-menu-hover">
-                            <div class="nav-item"><span class="d-inline-block">01.</span> <a href="#home" class="scroll nav-link rotate">home</a></div>
-                        </li>
-                        <li class="full-menu-hover">
-                            <div class="nav-item"><span class="d-inline-block">02.</span> <a href="#about" class="scroll nav-link">about</a></div>
-                        </li>
-                        <li class="full-menu-hover">
-                            <div class="nav-item"><span class="d-inline-block">03.</span> <a href="#team" class="scroll nav-link">team</a></div>
-                        </li>
-                        <li class="full-menu-hover">
-                            <div class="nav-item"><span class="d-inline-block">04.</span> <a href="#work" class="scroll nav-link">work</a></div>
-                        </li>
-                        <li class="full-menu-hover">
-                            <div class="nav-item"><span class="d-inline-block">05.</span> <a href="#pricing" class="scroll nav-link">pricing</a></div>
-                        </li>
-                        <li class="full-menu-hover">
-                            <div class="nav-item"><span class="d-inline-block">06.</span> <a href="#client" class="scroll nav-link">client</a></div>
-                        </li>
-                        <li class="full-menu-hover">
-                            <div class="nav-item"><span class="d-inline-block">07.</span> <a href="#blog" class="scroll nav-link">blog</a></div>
-                        </li>
-                        <li class="full-menu-hover">
-                            <div class="nav-item"><span class="d-inline-block">08.</span> <a href="#contact" class="scroll nav-link">contact</a>
-                            </div>
-                        </li>
-                    </ul>
-
-                </div>
-                <div class="col-md-12 mt-3">
-                    <div class="side-nav-social">
-                        <a href="javascript:void(0)" class="facebook-bg-hvr"><i class="ti ti-facebook" aria-hidden="true"></i></a>
-                        <a href="javascript:void(0)" class="twitter-bg-hvr"><i class="ti ti-twitter-alt" aria-hidden="true"></i></a>
-                        <a href="javascript:void(0)" class="linkedin-bg-hvr"><i class="ti ti-linkedin" aria-hidden="true"></i></a>
-                        <a href="javascript:void(0)" class="google-bg-hvr"><i class="ti ti-google" aria-hidden="true"></i></a>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-    <!--Full Menu-->
+    <!-- Header end -->    
 
     <!-- Main Section start -->
     <section id="home" class="p-0 bg-img-4 bg-img-setting center-block">
@@ -177,7 +121,7 @@
                 <div class="row">
                   <div class="col-lg-12 text-left center-col">
                     <div class="text-white">
-                        <h2 class="font-weight-600">Hey, I'm Lauren Swann</h2>
+                        <h2 class="font-weight-600">Welcome, <?php echo $nama ?></h2>
                         <h3 id="personal"></h3>
                     </div>
                   </div>

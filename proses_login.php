@@ -73,7 +73,7 @@ include_once("function/koneksi.php");
                             ?><script> alert("Selamat, Kartu anda terdaftar");</script> 
                             <?php
         
-                            header('Refresh: 0.001; URL=http://localhost/newATM/page_check.php?page=logout');
+                            header('Refresh: 0.001; URL=http://localhost/newATM/page_check.php?page=personal');
                         }
 
                         //$pin = $_POST['Ppin'];
