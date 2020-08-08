@@ -16,6 +16,7 @@
         $email = $_SESSION['email']; 
         $rek = $_SESSION['rek'];
         $bankcode = $_SESSION['bankcode'];
+        $linkpp = $_SESSION['link'];
     }
 ?>
 <?php
@@ -217,7 +218,7 @@
             </div>
             <div class="col-lg-6 col-md-12 p-0 ">
                 <div class="hover-effect">
-                    <img alt="about" src="<?php echo BASE_URL.'images/muka.jpg' ?>" class="about-img wow fadeInLeft" style="width:961px; height:956px; object-fit:cover">
+                    <img alt="about" src="<?php echo $linkpp ?>" class="about-img wow fadeInLeft" style="width:961px; height:956px; object-fit:cover">
                 </div>
             </div>
         </div>
@@ -657,6 +658,7 @@
 
 <!-- Custom JS File -->
 <script src="js/functions.js"></script>
+
 </body>
 </html>
 

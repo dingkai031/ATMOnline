@@ -71,6 +71,7 @@ include_once("function/koneksi.php");
                             $_SESSION['email'] = $baris['email'];
                             $_SESSION['rek'] = $baris['rekening'];
                             $_SESSION['bankcode'] = $baris['bankcode'];
+                            $_SESSION['link'] = $baris['link'];
         
                             ?><script> alert("Selamat, Kartu anda terdaftar");</script> 
                             <?php
