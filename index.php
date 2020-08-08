@@ -1,5 +1,15 @@
 
-<?php include_once("function/helper.php"); ?>
+<?php 
+    include_once("function/helper.php"); 
+    session_start();
+
+    $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : false;
+
+    if ($user_id) {
+        header('Refresh: 0.001; URL=http://localhost/newATM/personal.php');
+    } 
+
+?>
 
 
 

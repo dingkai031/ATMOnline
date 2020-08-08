@@ -3293,7 +3293,7 @@ ul.rounded li::before {
     background: url(../images/banner12.jpg) no-repeat;
 }
 .bg-img-4 {
-    background: url(../images/banner20.jpg) no-repeat;
+    background: url(../images/three.jpg) no-repeat;
 }
 .bg-img-5 {
     background: url(../images/banner22.jpg) no-repeat;
@@ -3587,7 +3587,7 @@ ul.rounded li::before {
     height: 0.5rem;
     margin-top: 1rem;
 }
-.custom-progress {
+.detail-data{
     color: #18191d;
     margin-bottom: 2rem;
 }
