@@ -52,7 +52,7 @@ include_once("function/koneksi.php");
                         <?php
 
                         $hasil_hash = $_POST['hasil_hash'];
-                        $pin = $_POST['password'];
+                        $pin = md5($_POST['password']);
                         $query = mysqli_query($koneksi, "SELECT * FROM user WHERE hash='$hasil_hash' AND pin='$pin'");
 
                         if (mysqli_num_rows($query) == 0 ) {

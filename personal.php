@@ -1,6 +1,9 @@
 <?php 
     session_start();
     include_once("function/helper.php");
+    include_once("function/koneksi.php");
+    
+    
 
     $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : false;
 
@@ -14,9 +17,38 @@
         $rek = $_SESSION['rek'];
         $bankcode = $_SESSION['bankcode'];
     }
+?>
+<?php
+    if (isset($_POST['transfer'])) {
+        $bank_code_tujuan = $_POST['bank_code'];
+        $rek_tujuan = $_POST['rek'];
+        $bal = $_POST['amount'];
 
+        $query_bankcode = mysqli_query($koneksi, "SELECT * FROM bank WHERE bankcode='$bank_code_tujuan'");
+        $query_rek = mysqli_query($koneksi, "SELECT * FROM user WHERE bankcode='$bank_code_tujuan' AND rekening='$rek_tujuan'");
+
+        if (mysqli_num_rows($query_bankcode) == 0 ) {
+            $bankcode_error = 'Sorry, bankcode is not valid';
+        }
+        if ($rek == $rek_tujuan) {
+            $rek_error = "Sorry, destination account number could not be the same as your's";
+        }elseif (mysqli_num_rows($query_rek) == 0 ) {
+            $rek_error = 'Sorry, account number could not be found';
+        }
+        if ($saldo<=$bal) {
+            $saldo_error = 'Sorry, your balance is not sufficient';
+        }
+    }
 ?>
 
+<?php 
+    $query_nama_bank = mysqli_query($koneksi, "SELECT * FROM bank WHERE bankcode='$bankcode';");
+    $row = mysqli_fetch_assoc($query_nama_bank);
+
+    $nama_bank = $row['name'];
+
+    echo $nama_bank;
+?>
 
 
 <!DOCTYPE html>
@@ -63,19 +95,7 @@
 <body data-spy="scroll" data-target=".navbar" data-offset="90">
 
 <!-- Loader -->
-<div class="loader" id="loader-fade">
-    <div class="loader-container center-block">
-        <div class="grid-row">
-            <div class="col center-block">
-                <ul class="loading reversed">
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
+
 <!-- Loader ends -->
 
     <!-- Header start -->
@@ -151,10 +171,13 @@
                             <h6 class="font-18 mb-0 text-capitalize">Email  <span class="float-sm-right"><b class="font-weight-500"><?php echo $email ?></b></span></h6>
                         </li>
                         <li class="detail-data" style="border-bottom: 0.2em solid #FAF6F5;">
-                            <h6 class="font-18 mb-0 text-capitalize">Rek num.  <span class="float-sm-right"><b class="font-weight-500"><?php echo $rek ?></b></span></h6>
+                            <h6 class="font-18 mb-0 text-capitalize">Account number  <span class="float-sm-right"><b class="font-weight-500"><?php echo $rek ?></b></span></h6>
                         </li>
                         <li class="detail-data" style="border-bottom: 0.2em solid #FAF6F5;">
                             <h6 class="font-18 mb-0 text-capitalize">Bank code  <span class="float-sm-right"><b class="font-weight-900"> <?php echo $bankcode ?></b>&nbsp;<?php echo $rek ?></span></h6>
+                        </li>
+                        <li class="detail-data">
+                            <img class=" <?php echo $nama_bank ?> &nbsp; float-sm-right"   >
                         </li>
                         
                     </ul>
@@ -182,19 +205,32 @@
                     </div>
 
                     <!--form-->
-                    <form action="<?php echo BASE_URL."proses_transfer.php" ?>" method="post">
+                    <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="post" >
                         <div class="row">
                             <div class="col-4">
-                                <input maxlength="3"  class="form-control" type="text" name="bank_code" placeholder="Bank Code" required="">
+                                <input maxlength="3"  class="form-control" type="text" name="bank_code" placeholder="Bank Code" required="" value="<?php 
+                                    if (isset($_POST['transfer'])) {if(!isset($bank_error)) { echo $bank_code_tujuan;}}   
+                                ?>">
+                                <?php if(isset($bankcode_error)): ?>
+                                    <span style="color:#ff1637 !important;font-size:14px;"><?php echo $bankcode_error; ?></span>
+                                <?php endif?>
                             </div>
                             <div class="col">
-                                <input maxlength="20" class="form-control" type="text" name="rek" placeholder="Rek Num." required="">
+                                <input maxlength="20" class="form-control" type="text" name="rek" placeholder="Rek Num." required="" value="<?php if (isset($_POST['transfer'])) {if(!isset($rek_error)) { echo $rek_tujuan;}} ?>">
+                                <?php if(isset($rek_error)): ?>
+                                    <span style="color:#ff1637 !important; font-size:14px !important" ><?php echo $rek_error; ?></span>
+                                <?php endif?>
                             </div>
                         </div>
                         
-                        <input  maxlength="10" class="form-control" type="text" name="amount" placeholder="Balance amount" required="">
+                        <input  maxlength="10" class="form-control" type="text" name="amount" placeholder="Balance amount" required="" value="<?php 
+                                    if (isset($_POST['transfer'])) {if(!isset($saldo_error)) { echo $bal;}}
+                                ?>">
+                        <?php if(isset($saldo_error)): ?>
+                                    <span style="color:#ff1637 !important; font-size:14px !important" ><?php echo $saldo_error; ?></span>
+                        <?php endif?>
                         <div class="form-button mt-40px">
-                            <button type="submit" style="background-color:#E2D7D5 !important;" class="btn-setting btn-hvr-setting-main btn-white btn-hvr text-uppercase" >Transfer
+                            <button name="transfer" type="submit" style="background-color:#E2D7D5 !important;" class="btn-setting btn-hvr-setting-main btn-white btn-hvr text-uppercase" >Transfer
                                 <span class="btn-hvr-setting btn-hvr-black">
                                      <span class="btn-hvr-setting-inner">
                                      <span class="btn-hvr-effect"></span>
@@ -204,9 +240,11 @@
                                      </span>
                                     </span>
                             </button>
-                            <a href="forget-password.html">Bank code list</a>
+                            <a href="forget-password.html">Bank code list </a>
                         </div>
                     </form>
+
+                    
 
                 </div>
             </div>
