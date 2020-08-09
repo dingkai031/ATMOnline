@@ -93,7 +93,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-12 text-center">
-                    <a href="<?php echo BASE_URL ?>" class="logo-full mb-5 mb-xs-2rem"><img src="<?php echo BASE_URL."images/side-logo-black.png"?>" alt=""></a>
+                    <a href="<?php echo BASE_URL."page_check.php?page=index" ?>" class="logo-full mb-5 mb-xs-2rem"><img src="<?php echo BASE_URL."images/side-logo-black.png"?>" alt=""></a>
                 </div>
                 
             </div>

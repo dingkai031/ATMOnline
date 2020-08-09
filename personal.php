@@ -4,7 +4,8 @@
     include_once("function/koneksi.php");
     
     
-
+    
+//C------------------------------CHECK APAKAH ADA USER, JIKA TIDAK ADA, TIDAK BISA AKSES PERSONAL DASHBOARD-----------------------
     $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : false;
 
     if (!$user_id){
@@ -19,7 +20,14 @@
         $linkpp = $_SESSION['link'];
     }
 ?>
+
 <?php
+//--------------------------------------------PROSES TRANSFER---------------------------------------------------------------
+
+    include_once("function/helper.php");
+    include_once("function/koneksi.php");
+
+
     if (isset($_POST['transfer'])) {
         $bank_code_tujuan = $_POST['bank_code'];
         $rek_tujuan = $_POST['rek'];
@@ -78,9 +86,17 @@
 ?>
 
 <?php 
+
+//------------------------MENCARI LINK BANK--------------------------------------------------
+
     $query_nama_bank = mysqli_query($koneksi, "SELECT * FROM bank WHERE bankcode='$bankcode';");
     $row = mysqli_fetch_assoc($query_nama_bank);
-    $link = $row['link'];    
+    $link = $row['link'];
+?>
+
+<?php 
+//--------------------------SEMUA DATA BANK---------------
+    $query_semua_nama_bank = mysqli_query($koneksi, "SELECT * FROM bank");
 ?>
 
 
@@ -135,7 +151,7 @@
     <header>
         <nav class="navbar navbar-top-default navbar-expand-lg static-nav nav-style seven-links transparent-bg">
             <div class="container">
-                <a class="logo" href="javascript:void(0)">
+                <a class="logo" href="<?php echo BASE_URL."page_check.php?page=index" ?>">
                     <img src="images/logo-white.png" alt="logo" title="Logo" class="logo-default">
                     <img src="images/logo-black.png" alt="logo" title="Logo" class="logo-scrolled">
                 </a>
@@ -204,10 +220,7 @@
                             <h6 class="font-18 mb-0 text-capitalize">Email  <span class="float-sm-right"><b class="font-weight-500"><?php echo $email ?></b></span></h6>
                         </li>
                         <li class="detail-data" style="border-bottom: 0.2em solid #FAF6F5;">
-                            <h6 class="font-18 mb-0 text-capitalize">Account number  <span class="float-sm-right"><b class="font-weight-500"><?php echo $rek ?></b></span></h6>
-                        </li>
-                        <li class="detail-data" style="border-bottom: 0.2em solid #FAF6F5;">
-                            <h6 class="font-18 mb-0 text-capitalize">Bank code  <span class="float-sm-right"><b class="font-weight-900"> <?php echo $bankcode ?></b>&nbsp;<?php echo $rek ?></span></h6>
+                            <h6 class="font-18 mb-0 text-capitalize">Account num.  <span class="float-sm-right"><b class="font-weight-900"> <?php echo $bankcode ?></b>&nbsp;<?php echo $rek ?></span></h6>
                         </li>
                         <li class="detail-data">
                             <img class="float-sm-right" src="<?php echo $link ?>" style="width:128p;height:92px;object-fit:cover">
@@ -234,7 +247,9 @@
             <div class="col-lg-6">
                 <div class="login-content">
                     <div class="main-title d-inline-block mb-4  text-md-left wow fadeInDown">
-                        <h2 class="mb-3 color-black">Transfer.</h2>
+                        <h5>Your transaction will be secure</h5>
+                        <h2 class="mb-3 color-black">Transfer</h2>
+                        <p>Always make sure your recipient number is correct, because we can't undo the transaction.</p>
                     </div>
 
                     <!--form-->
@@ -263,7 +278,7 @@
                                     <span style="color:#ff1637 !important; font-size:14px !important" ><?php echo $saldo_error; ?></span>
                         <?php endif?>
                         <div class="form-button mt-40px">
-                            <button name="transfer" type="submit" style="background-color:#E2D7D5 !important;" class="btn-setting btn-hvr-setting-main btn-white btn-hvr text-uppercase" >Transfer
+                            <button type="button" data-toggle="modal" data-target="#previewtrans" style="background-color:#E2D7D5 !important;" class="btn-setting btn-hvr-setting-main btn-white btn-hvr text-uppercase" >Review
                                 <span class="btn-hvr-setting btn-hvr-black">
                                      <span class="btn-hvr-setting-inner">
                                      <span class="btn-hvr-effect"></span>
@@ -273,12 +288,72 @@
                                      </span>
                                     </span>
                             </button>
-                            <a href="forget-password.html">Bank code list </a>
+                            <a href="#" data-toggle="modal" data-target="#bankcodelist">Bank code list </a>
+                        </div>
+
+
+                        <div class="modal fade" id="bankcodelist" role="dialog">
+                            <div class="modal-dialog">
+    
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h4 class="modal-title">List of bank code</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        
+                                    </div>
+                                    <div class="modal-body">
+            
+                                        <?php 
+                                        echo "<table class='table'>"; // start a table tag in the HTML
+                                        echo "<thead><tr><th scope='col'>Bank code</th><th scope='col'>Bank name</th><th scope='col'>Bank logo</th></tr></thead>";
+                                        echo "<tbody>";
+                                        
+                                        while($temp = mysqli_fetch_array($query_semua_nama_bank)){   //Creates a loop to loop through results
+                                            echo "<tr><td>" . $temp['bankcode'] . "</td><td>" . $temp['name'] . "</td><td><img src='". $temp['link'] . "'></td></tr>" ;  //$row['index'] the index here is a field name
+                                        }
+                                        echo "</tbody>";
+                                        echo "</table>"; //Close the table in HTML
+                                        ?>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                             <!-- Modal review -->
+                        <div class="modal fade" id="previewtrans" role="dialog">
+                            <div class="modal-dialog">
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h4 class="modal-title">Confirmation</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Before you continue your transaction, we suggest to double check your data.</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button name="transfer" type="submit" style="color:#ffffff" class="btn-setting btn-hvr-setting-main btn-gray btn-hvr text-uppercase" >Transfer
+                                            <span class="btn-hvr-setting btn-hvr-pink" >
+                                                <span class="btn-hvr-setting-inner">
+                                                    <span class="btn-hvr-effect"></span>
+                                                    <span class="btn-hvr-effect"></span>
+                                                    <span class="btn-hvr-effect"></span>
+                                                    <span class="btn-hvr-effect"></span>
+                                                </span>
+                                            </span>
+                                        </button>
+                                        <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </form>
-
-                    
-
                 </div>
             </div>
             <div class="col-lg-6 d-none d-lg-block p-0">
@@ -661,5 +736,6 @@
 
 </body>
 </html>
+
 
 
