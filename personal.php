@@ -298,9 +298,7 @@
                                 <!-- Modal content-->
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                    <h4 class="modal-title">List of bank code</h4>
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        
                                     </div>
                                     <div class="modal-body">
             
@@ -387,22 +385,27 @@
                     <div data-filter="*" class="cbp-filter-item-active cbp-filter-item cbp-filter-style">
                         All <div class="cbp-filter-counter"></div>
                     </div>
-                    <div data-filter=".graphic-designs" class="cbp-filter-item cbp-filter-style">
-                        Graphic Designs <div class="cbp-filter-counter"></div>
+                    <div data-filter=".today" class="cbp-filter-item cbp-filter-style">
+                        Today <div class="cbp-filter-counter"></div>
                     </div>
-                    <div data-filter=".web-designs" class="cbp-filter-item cbp-filter-style">
-                        Web Designs <div class="cbp-filter-counter"></div>
+                    <div data-filter=".yesterday" class="cbp-filter-item ">
+                        Yesterday <div class="cbp-filter-counter"></div>
                     </div>
+                    
+                    <!--
                     <div data-filter=".seo" class="cbp-filter-item cbp-filter-style">
-                        SEO <div class="cbp-filter-counter"></div>
+                        This month <div class="cbp-filter-counter"></div>
                     </div>
                     <div data-filter=".marketing" class="cbp-filter-item">
-                        Marketing <div class="cbp-filter-counter"></div>
+                        This year <div class="cbp-filter-counter"></div>
                     </div>
+                    -->
                 </div>
 
                 <div id="js-grid-mosaic-flat" class="cbp cbp-l-grid-mosaic-flat no-transition">
-                    <div class="cbp-item web-designs marketing">
+
+
+                    <div class="cbp-item today">
                         <a href="images/work1.jpg" class="cbp-caption cbp-lightbox" data-title="Bolt UI<br>by Tiberiu Neamu">
                             <div class="cbp-caption-defaultWrap">
                                 <img src="images/work1.jpg" alt="work">
@@ -420,97 +423,7 @@
                             </div>
                         </a>
                     </div>
-                    <div class="cbp-item graphic-designs seo">
-                        <a href="images/work2.jpg" class="cbp-caption cbp-lightbox" data-title="World Clock<br>by Paul Flavius Nechita">
-                            <div class="cbp-caption-defaultWrap">
-                                <img src="images/work2.jpg" alt="work">
-                            </div>
-                            <div class="cbp-caption-activeWrap">
-                                <div class="cbp-l-caption-alignCenter">
-                                    <div class="cbp-l-caption-body">
-                                        <p>Elegant | Images</p>
-                                        <div class="cbp-l-caption-title">Creative art work</div>
-                                        <span class="work-icon">
-                                                <i class="ti ti-arrow-right"></i>
-                                            </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="cbp-item graphic-designs web-designs">
-                        <a href="images/work3.jpg" class="cbp-caption cbp-lightbox" data-title="WhereTO App<br>by Tiberiu Neamu">
-                            <div class="cbp-caption-defaultWrap">
-                                <img src="images/work3.jpg" alt="work">
-                            </div>
-                            <div class="cbp-caption-activeWrap">
-                                <div class="cbp-l-caption-alignCenter">
-                                    <div class="cbp-l-caption-body">
-                                        <p>Elegant | Images</p>
-                                        <div class="cbp-l-caption-title">Modern portfolio</div>
-                                        <span class="work-icon">
-                                                <i class="ti ti-arrow-right"></i>
-                                            </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="cbp-item seo marketing">
-                        <a href="images/work6.jpg" class="cbp-caption cbp-lightbox" data-title="Remind~Me Widget<br>by Tiberiu Neamu">
-                            <div class="cbp-caption-defaultWrap">
-                                <img src="images/work6.jpg" alt="work">
-                            </div>
-                            <div class="cbp-caption-activeWrap">
-                                <div class="cbp-l-caption-alignCenter">
-                                    <div class="cbp-l-caption-body">
-                                        <p>Elegant | Images</p>
-                                        <div class="cbp-l-caption-title">Digital art works</div>
-                                        <span class="work-icon">
-                                                <i class="ti ti-arrow-right"></i>
-                                            </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
 
-                    <div class="cbp-item web-designs seo">
-                        <a href="images/work4.jpg" class="cbp-caption cbp-lightbox" data-title="Seemple* Music<br>by Tiberiu Neamu">
-                            <div class="cbp-caption-defaultWrap">
-                                <img src="images/work4.jpg" alt="work">
-                            </div>
-                            <div class="cbp-caption-activeWrap">
-                                <div class="cbp-l-caption-alignCenter">
-                                    <div class="cbp-l-caption-body">
-                                        <p>Elegant | Images</p>
-                                        <div class="cbp-l-caption-title">Photography</div>
-                                        <span class="work-icon">
-                                                <i class="ti ti-arrow-right"></i>
-                                            </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="cbp-item web-designs marketing">
-                        <a href="images/work5.jpg" class="cbp-caption cbp-lightbox" data-title="iDevices<br>by Tiberiu Neamu">
-                            <div class="cbp-caption-defaultWrap">
-                                <img src="images/work5.jpg" alt="work">
-                            </div>
-                            <div class="cbp-caption-activeWrap">
-                                <div class="cbp-l-caption-alignCenter">
-                                    <div class="cbp-l-caption-body">
-                                        <p>Elegant | Images</p>
-                                        <div class="cbp-l-caption-title">Modern workspace</div>
-                                        <span class="work-icon">
-                                                <i class="ti ti-arrow-right"></i>
-                                            </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
 
                 </div>
             </div>
