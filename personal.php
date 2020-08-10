@@ -31,13 +31,14 @@
     if (isset($_POST['transfer'])) {
         $bank_code_tujuan = $_POST['bank_code'];
         $rek_tujuan = $_POST['rek'];
-        $bal = $_POST['amount'];
-
+        $bal = $bal_sebelum_sanksi = $_POST['amount'];
+         
         $sanksi = 2500;
 
         $query_bankcode = mysqli_query($koneksi, "SELECT * FROM bank WHERE bankcode='$bank_code_tujuan'");
         $query_rek = mysqli_query($koneksi, "SELECT * FROM user WHERE bankcode='$bank_code_tujuan' AND rekening='$rek_tujuan'");
         $querypemilik = mysqli_query($koneksi, "SELECT * FROM user WHERE name='$nama'");
+        $penalty = false;
 
         if (mysqli_num_rows($query_bankcode) == 0 ) {
             $bankcode_error = 'Sorry, bankcode is not valid';
@@ -55,6 +56,7 @@
                 if ($saldo>$bal) {
                     if ($bankcode != $bank_code_tujuan) {
                         $bal = $bal + $sanksi;
+                        $penalty = true;
                     }
                     $pemilik = mysqli_fetch_assoc($querypemilik);
                     $akuntujuan = mysqli_fetch_assoc($query_rek);
@@ -67,12 +69,18 @@
 
                     $nominalmutasinambah = "+ ".$bal;
                     $nominalmutasingurang = "- ".$bal;
-                    $ketberkurang = "Transfer to ".$namatujuan;
-                    $ketbertambah = "Received from ".$nama;
+
+                    if ($penalty) {
+                        $ketberkurang = "Transfer an amount of " . $bal_sebelum_sanksi. " to ". $namatujuan. " with a penalty of ".$sanksi;
+                        $ketbertambah = "Received an amount of " . $bal_sebelum_sanksi. " from ". $nama . " with a penalty of ".$sanksi;
+                    }
+
+                    $ketberkurang = "Transfer an amount of ".$bal_sebelum_sanksi. " to ".$namatujuan;
+                    $ketbertambah = "Received an amount of ".$bal_sebelum_sanksi." from ".$nama;
 
                     if (mysqli_query($koneksi, "UPDATE user SET saldo='$saldopemilikakhir' WHERE name='$nama'") && mysqli_query($koneksi, "UPDATE user SET saldo='$saldotujuanakhir' WHERE name='$namatujuan'")){
-                        mysqli_query($koneksi, "INSERT INTO transaksi (mutasi, waktu_tanggal, user_id, tujuan ) VALUES ('$nominalmutasingurang','$tanggal', '$user_id', '$ketberkurang')");
-                        mysqli_query($koneksi, "INSERT INTO transaksi (mutasi, waktu_tanggal, user_id, tujuan ) VALUES ('$nominalmutasinambah','$tanggal', '$idtujuan', '$ketbertambah')");
+                        mysqli_query($koneksi, "INSERT INTO transaksi (mutasi, waktu_tanggal, user_id, keterangan ) VALUES ('$nominalmutasingurang','$tanggal', '$user_id', '$ketberkurang')");
+                        mysqli_query($koneksi, "INSERT INTO transaksi (mutasi, waktu_tanggal, user_id, keterangan ) VALUES ('$nominalmutasinambah','$tanggal', '$idtujuan', '$ketbertambah')");
                         $_SESSION['saldo'] = $saldopemilikakhir;
                         ?><script> alert("Transfer succedd");</script> 
                         <?php
@@ -100,6 +108,13 @@
 ?>
 
 
+<?php 
+//----------------------history transaksi---------------------------
+    $query_history = mysqli_query($koneksi, "SELECT waktu_tanggal,keterangan FROM transaksi WHERE user_id='$user_id' ORDER BY Month(waktu_tanggal) ASC");
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -108,7 +123,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>Awaza | One Page Parallax</title>
+    <title>ATM Online</title>
 
     <!-- Favicon -->
     <link rel="icon" href="images/favicon.png">
@@ -139,6 +154,9 @@
     <link rel="stylesheet" href="css/style.css">
     <!-- Custom Style CSS File -->
     <link rel="stylesheet" href="css/custom.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.css">
+
 
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="90">
@@ -179,7 +197,7 @@
     <!-- Header end -->    
 
     <!-- Main Section start -->
-    <section id="home" class="p-0 bg-img-4 bg-img-setting center-block">
+    <section id="home" class="p-0 bg-img-4 bg-img-setting center-block" style="margin-bottom:0px !important">
         <h2 class="d-none">hidden</h2>
         <div class="fullscreen">
             <div class="container">
@@ -200,7 +218,7 @@
     <!-- Main Section end -->
 
     <!-- personal_info start -->
-    <section id="personal_info" class="stats half-section p-0">
+    <section id="personal_info" class="stats half-section p-0" style="padding-top:60px !important;padding-bottom:60px !important; ">
     <h2 class="d-none">heading</h2>
     <div class="container-fluid">
         <div class="row align-items-center">
@@ -240,17 +258,21 @@
     <!-- About ends -->
 
 
-    <!-- Team start -->
-    <section id="transfer">
+    <section id="transfer" class="parallax-setting parallaxie parallax1" style="padding-top:240px !important;padding-bottom:240px !important;margin-top:0px !important; ">
         <div class="container-fluid">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <div class="login-content">
-                    <div class="main-title d-inline-block mb-4  text-md-left wow fadeInDown">
+            <div class="row">
+                <div class="col-12">
+                <div class="main-title mb-4  wow fadeInDown">
                         <h5>Your transaction will be secure</h5>
-                        <h2 class="mb-3 color-black">Transfer</h2>
-                        <p>Always make sure your recipient number is correct, because we can't undo the transaction.</p>
+                        <h1 class="mb-3" style="color:#f7f7f7 !important;">Transfer</h1>
+                        <p style="color:#f7f7f7 !important;">Always make sure your recipient number is correct, because we can't undo the transaction.</p>
                     </div>
+                </div>
+            </div>
+        <div class="row align-items-center">
+            <div class="col-lg-12">
+                <div class="login-content">
+                    
 
                     <!--form-->
                     <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="post" class="wow fadeInLeft" >
@@ -258,20 +280,20 @@
                             <div class="col-4">
                                 <input maxlength="3"  class="form-control" type="text" name="bank_code" placeholder="Bank Code" required="" value="<?php 
                                     if (isset($_POST['transfer'])) {if(!isset($bankcode_error)) { echo $bank_code_tujuan;}}   
-                                ?>">
+                                ?>" onkeypress='validate(event)'>
                                 <?php if(isset($bankcode_error)): ?>
                                     <span style="color:#ff1637 !important;font-size:14px;"><?php echo $bankcode_error; ?></span>
                                 <?php endif?>
                             </div>
                             <div class="col">
-                                <input maxlength="20" class="form-control" type="text" name="rek" placeholder="Rek Num." required="" value="<?php if (isset($_POST['transfer'])) {if(!isset($rek_error)) { echo $rek_tujuan;}} ?>">
+                                <input onkeypress="validate(event)" maxlength="20" class="form-control" type="text" name="rek" placeholder="Rek Num." required="" value="<?php if (isset($_POST['transfer'])) {if(!isset($rek_error)) { echo $rek_tujuan;}}?>">
                                 <?php if(isset($rek_error)): ?>
                                     <span style="color:#ff1637 !important; font-size:14px !important" ><?php echo $rek_error; ?></span>
                                 <?php endif?>
                             </div>
                         </div>
                         
-                        <input  maxlength="10" class="form-control" type="text" name="amount" placeholder="Balance amount" required="" value="<?php 
+                        <input onkeypress="validate(event)" maxlength="10" class="form-control" type="text" name="amount" placeholder="Balance amount" required="" value="<?php 
                                     if (isset($_POST['transfer'])) {if(!isset($saldo_error)) { echo $bal;}}
                                 ?>">
                         <?php if(isset($saldo_error)): ?>
@@ -288,7 +310,7 @@
                                      </span>
                                     </span>
                             </button>
-                            <a href="#" data-toggle="modal" data-target="#bankcodelist">Bank code list </a>
+                            <a href="#" data-toggle="modal" data-target="#bankcodelist" style="color:#ff1637"> Bank code list </a>
                         </div>
 
 
@@ -354,12 +376,6 @@
                     </form>
                 </div>
             </div>
-            <div class="col-lg-6 d-none d-lg-block p-0">
-                <div class="hover-effect">
-                    <img src="images/transaksi.jpg" class="about-img wow fadeInRight" alt="image" style="width:961px; height:956px; object-fit:cover" >
-                </div>
-                
-            </div>
         </div>
 
 
@@ -368,63 +384,32 @@
     <!-- Team ends -->
 
     <!-- transaction Starts -->
-    <section id="transaction" class="bg-light-gray pb-0">
+    <section id="transaction" class="bg-light-gray" style="margin-bottom:50px !important;margin-top:0px !important;padding-bottom:0px !important">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <div class="main-title mb-2rem wow fadeIn" data-wow-delay="300ms">
-                        <h5> Some of the best work </h5>
-                        <h2> creative portfolio </h2>
-                        <p>Curabitur mollis bibendum luctus. Duis suscipit vitae dui sed suscipit. Vestibulum auctor nunc vitae diam eleifend, in maximus metus sollicitudin. Quisque vitae sodales lectus. Nam porttitor justo sed mi finibus, vel tristique risus faucibus. </p>
+                        <h5> Everything is recorded here </h5>
+                        <h2> Transaction </h2>
+                        <p>If you found any data that is not correctly writed, missing data or a data that shouldn't be there <br> you suggest to contact us as soon as possible. </p>
                     </div>
                 </div>
             </div>
             <div class="row d-block">
-
-                <div id="js-filters-mosaic-flat" class="cbp-l-filters-alignCenter">
-                    <div data-filter="*" class="cbp-filter-item-active cbp-filter-item cbp-filter-style">
-                        All <div class="cbp-filter-counter"></div>
-                    </div>
-                    <div data-filter=".today" class="cbp-filter-item cbp-filter-style">
-                        Today <div class="cbp-filter-counter"></div>
-                    </div>
-                    <div data-filter=".yesterday" class="cbp-filter-item ">
-                        Yesterday <div class="cbp-filter-counter"></div>
-                    </div>
-                    
-                    <!--
-                    <div data-filter=".seo" class="cbp-filter-item cbp-filter-style">
-                        This month <div class="cbp-filter-counter"></div>
-                    </div>
-                    <div data-filter=".marketing" class="cbp-filter-item">
-                        This year <div class="cbp-filter-counter"></div>
-                    </div>
-                    -->
-                </div>
-
-                <div id="js-grid-mosaic-flat" class="cbp cbp-l-grid-mosaic-flat no-transition">
-
-
-                    <div class="cbp-item today">
-                        <a href="images/work1.jpg" class="cbp-caption cbp-lightbox" data-title="Bolt UI<br>by Tiberiu Neamu">
-                            <div class="cbp-caption-defaultWrap">
-                                <img src="images/work1.jpg" alt="work">
-                            </div>
-                            <div class="cbp-caption-activeWrap">
-                                <div class="cbp-l-caption-alignCenter">
-                                    <div class="cbp-l-caption-body">
-                                        <p>Elegant | Images</p>
-                                        <div class="cbp-l-caption-title">We are digital agency</div>
-                                        <span class="work-icon">
-                                                <i class="ti ti-arrow-right"></i>
-                                            </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-
-
+                <div>
+                    <?php 
+                        echo "<table  data-toggle='table' data-pagination='true' data-search='true' data-page-list='[10, 16, 32, 50, all]'>"; // start a table tag in the HTML
+                        echo "<thead style='color:#ffffff !important;background-color:#37474F !important'><tr><th >No</th><th >Date</th><th >Information</th></tr></thead>";
+                        echo "<tbody>";
+                        $i = 1;
+                                        
+                        while($temp2 = mysqli_fetch_array($query_history)){   //Creates a loop to loop through results
+                            echo "<tr><td>" . $i . "</td><td>" . $temp2['waktu_tanggal'] . "</td><td>". $temp2['keterangan'] . "</td></tr>" ;  //$row['index'] the index here is a field name
+                            $i++;
+                        }
+                        echo "</tbody>";
+                        echo "</table>"; //Close the table in HTML
+                    ?>
                 </div>
             </div>
         </div>
@@ -432,135 +417,57 @@
     <!-- Work ends -->
 
     <!-- Pricing start -->
-    <section id="pay">
-        <div class="container">
+    <section id="pay"  class="parallax-setting parallaxie parallax2" style="padding-bottom:380px !important;magrin-top:270px !important;">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-12">
                     <div class="main-title wow rotateInDownLeft" data-wow-delay="300ms">
-                        <h5> We have flexible pricing </h5>
-                        <h2> Awaza's Packages</h2>
-                        <p>Curabitur mollis bibendum luctus. Duis suscipit vitae dui sed suscipit. Vestibulum auctor nunc vitae diam eleifend, in maximus metus sollicitudin. Quisque vitae sodales lectus. Nam porttitor justo sed mi finibus, vel tristique risus faucibus.</p>
+                        <h5> The very best secure payment.  </h5>
+                        <h2 style="color:#fff !important"> Pay to e-commerce</h2>
+                        <p style="color:#fff !important">We will not be responsible for any transactions made outside of this website </p>
                     </div>
                 </div>
             </div>
-            <div class="row three-col-pricing">
-                <div class="col-lg-4 col-md-6 col-sm-12 text-center md-mb-5 wow fadeInUp">
-                    <div class="pricing-item-two">
-                        <div class="price-upper-column">
-                        <div class="price-box clearfix">
-                            <div class="price_title">
-                                <h4 class="text-capitalize">Standard</h4>
+            <div class="row">
+                <div class="col-12">
+                <div class="login-content">
+                <form action="#" method="post" class="wow fadeInLeft" >
+                        <div class="row">
+                            <div class="col-4">
+                                <input maxlength="3"  class="form-control" type="text" name="bank_code" placeholder="Institution Code" required="" onkeypress='validate(event)'>
+                                <?php if(isset($bankcode_error)): ?>
+                                    <span style="color:#ff1637 !important;font-size:14px;"><?php echo $bankcode_error; ?></span>
+                                <?php endif?>
                             </div>
-                            <div class="price">
-                                <h2 class="position-relative"><span class="dollar font-14">$</span>22<span class="month"> Monthly</span></h2>
-                            </div>
-                            <div class="rating">
-                                <i class="ti ti-star"></i>
-                                <i class="ti ti-star"></i>
-                                <i class="ti ti-star"></i>
-                                <i class="ti ti-star"></i>
-                                <i class="ti ti-star"></i>
+                            <div class="col">
+                                <input onkeypress="validate(event)" maxlength="20" class="form-control" type="text" name="rek" placeholder="Payment Num." required="" value="<?php if (isset($_POST['transfer'])) {if(!isset($rek_error)) { echo $rek_tujuan;}}?>">
+                                <?php if(isset($rek_error)): ?>
+                                    <span style="color:#ff1637 !important; font-size:14px !important" ><?php echo $rek_error; ?></span>
+                                <?php endif?>
                             </div>
                         </div>
+                        
+                        <input onkeypress="validate(event)" maxlength="10" class="form-control" type="text" name="amount" placeholder="Total payment" required="" readonly>
+                        <div class="form-button mt-40px">
+                            <button type="button" style="background-color:#E2D7D5 !important;" class="btn-setting btn-hvr-setting-main btn-white btn-hvr text-uppercase" >Preview
+                                <span class="btn-hvr-setting btn-hvr-black">
+                                     <span class="btn-hvr-setting-inner">
+                                     <span class="btn-hvr-effect"></span>
+                                     <span class="btn-hvr-effect"></span>
+                                     <span class="btn-hvr-effect"></span>
+                                     <span class="btn-hvr-effect"></span>
+                                     </span>
+                                    </span>
+                            </button>
+                            <a href="#" style="color:#ff1637;">Institution code list </a>
                         </div>
-                        <div class="price-down-column">
-                        <div class="price-description">
-                            <p>Full Access</p>
-                            <p>Unlimited Bandwidth</p>
-                            <p>Email Accounts</p>
-                            <p>8 Free Forks Every Months</p>
-                        </div>
-                            <a href="javascript:void(0)" class="btn-setting btn-hvr-setting-main btn-transparent2 btn-hvr">choose plan
-                                <span class="btn-hvr-setting btn-hvr-yellow">
-						     <span class="btn-hvr-setting-inner">
-							 <span class="btn-hvr-effect"></span>
-                             <span class="btn-hvr-effect"></span>
-                             <span class="btn-hvr-effect"></span>
-                             <span class="btn-hvr-effect"></span>
-                             </span>
-                            </span>
-                            </a>
-                        </div>
-                    </div>
+
+                    </form>
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-12 text-center md-mb-5 wow fadeInUp">
-                    <div class="pricing-item-two advance-plan">
-                        <div class="price-upper-column">
-                            <div class="price-box clearfix">
-                                <div class="price_title">
-                                    <h4 class="text-capitalize">Advance</h4>
-                                </div>
-                                <div class="price">
-                                    <h2 class="position-relative"><span class="dollar font-14">$</span>55<span class="month"> Monthly</span></h2>
-                                </div>
-                                <div class="rating">
-                                    <i class="ti ti-star"></i>
-                                    <i class="ti ti-star"></i>
-                                    <i class="ti ti-star"></i>
-                                    <i class="ti ti-star"></i>
-                                    <i class="ti ti-star"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="price-down-column">
-                            <div class="price-description">
-                                <p>Full Access</p>
-                                <p>Unlimited Bandwidth</p>
-                                <p>Email Accounts</p>
-                                <p>8 Free Forks Every Months</p>
-                            </div>
-                            <a href="javascript:void(0)" class="btn-setting btn-hvr-setting-main btn-yellow">choose plan
-                                <span class="btn-hvr-setting">
-						     <span class="btn-hvr-setting-inner">
-							 <span class="btn-hvr-effect"></span>
-                             <span class="btn-hvr-effect"></span>
-                             <span class="btn-hvr-effect"></span>
-                             <span class="btn-hvr-effect"></span>
-                             </span>
-                            </span>
-                            </a>
-                        </div>
-                    </div>
                 </div>
-                <div class="col-lg-4 col-md-12 col-sm-12 text-center wow fadeInUp">
-                    <div class="pricing-item-two">
-                        <div class="price-upper-column">
-                            <div class="price-box clearfix">
-                                <div class="price_title">
-                                    <h4 class="text-capitalize">Standard</h4>
-                                </div>
-                                <div class="price">
-                                    <h2 class="position-relative"><span class="dollar font-14">$</span>22<span class="month"> Monthly</span></h2>
-                                </div>
-                                <div class="rating">
-                                    <i class="ti ti-star"></i>
-                                    <i class="ti ti-star"></i>
-                                    <i class="ti ti-star"></i>
-                                    <i class="ti ti-star"></i>
-                                    <i class="ti ti-star"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="price-down-column">
-                            <div class="price-description">
-                                <p>Full Access</p>
-                                <p>Unlimited Bandwidth</p>
-                                <p>Email Accounts</p>
-                                <p>8 Free Forks Every Months</p>
-                            </div>
-                            <a href="javascript:void(0)" class="btn-setting btn-hvr-setting-main btn-transparent2 btn-hvr">choose plan
-                                <span class="btn-hvr-setting btn-hvr-yellow">
-						     <span class="btn-hvr-setting-inner">
-							 <span class="btn-hvr-effect"></span>
-                             <span class="btn-hvr-effect"></span>
-                             <span class="btn-hvr-effect"></span>
-                             <span class="btn-hvr-effect"></span>
-                             </span>
-                            </span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                
+                
+                
             </div>
         </div>
     </section>
@@ -579,10 +486,10 @@
                         <li><a href="javascript:void(0)" class="wow fadeInDown"><i class="ti ti-twitter"></i> </a> </li>
                         <li><a href="javascript:void(0)" class="wow fadeInUp"><i class="ti ti-google"></i> </a> </li>
                         <li><a href="javascript:void(0)" class="wow fadeInDown"><i class="ti ti-linkedin"></i> </a> </li>
-                        <li><a href="javascript:void(0)" class="wow fadeInUp"><i class="ti ti-instagram"></i> </a> </li>
+                        <li><a href="https://instagram.com/yvnjlio" class="wow fadeInUp"><i class="ti ti-instagram"></i> </a> </li>
                         <li><a href="javascript:void(0)" class="wow fadeInDown"><i class="ti ti-pinterest"></i> </a> </li>
                     </ul>
-                    <p class="copyrights mt-2 mb-2">© 2019 Awaza. Made with love by <a href="javascript:void(0)">themesindustry</a></p>
+                    <p class="copyrights mt-2 mb-2">© 2020 ATMOnline Made with brain by <a href="javascript:void(0)">Yovan Julio Adam</a></p>
                 </div>
             </div>
         </div>
@@ -591,10 +498,11 @@
 
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <!-- Bootstrap JS File -->
 <script src="js/popper.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+
 
 <!-- Appear JS File -->
 <script src="js/jquery.appear.js"></script>
@@ -639,6 +547,27 @@
 <script src="js/revolution/extensions/revolution.extension.parallax.min.js"></script>
 <script src="js/revolution/extensions/revolution.extension.slideanims.min.js"></script>
 <script src="js/revolution/extensions/revolution.extension.video.min.js"></script>
+<!-- number only -->
+<script>
+    function validate(evt) {
+        var theEvent = evt || window.event;
+
+        // Handle paste
+        if (theEvent.type === 'paste') {
+            key = event.clipboardData.getData('text/plain');
+        } else {
+            // Handle key press
+            var key = theEvent.keyCode || theEvent.which;
+            key = String.fromCharCode(key);
+        }
+        var regex = /[0-9]|\./;
+        if( !regex.test(key) ) {
+            theEvent.returnValue = false;
+            if(theEvent.preventDefault) theEvent.preventDefault();
+        }
+    }
+</script>
+
 
 <!-- Google Map Api -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJScy7qJ156DWM8kJVG-ZrK0R7Kize2Jg"></script>
@@ -646,6 +575,10 @@
 
 <!-- Custom JS File -->
 <script src="js/functions.js"></script>
+
+
+<script src="https://unpkg.com/bootstrap-table@1.17.1/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
 
 </body>
 </html>
