@@ -21,7 +21,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>Awaza | One Page Parallax</title>
+    <title>ATMOnline</title>
 
     <!-- Favicon -->
     <link rel="icon" href="images/favicon.png">
@@ -167,9 +167,10 @@
                              style="z-index:4; font-weight: 100; color: #ffffff; line-height:30px; font-family: 'Open Sans', sans-serif;text-transform:capitalize">The Best Transaction Methud During Pandemi
                         </div>
 
+
                         <div class="tp-caption" data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']" data-y="['middle','middle','middle','middle']"  data-voffset="['150','150','150','150']" data-width="310" data-height="none" data-responsive_offset="on" data-textAlign="['center','center','center','center']" data-margintop="[0,0,0,0]" data-marginright="[0,0,0,0]" data-marginbottom="[0,0,0,0]" data-marginleft="[0,0,0,0]" data-frames='[{"delay":700,"speed":2000,"frame":"0","from":"sX:1;sY:1;opacity:0;fb:40px;","to":"o:1;fb:0;","ease":"Power4.easeInOut"},{"delay":"wait","speed":300,"frame":"999","to":"opacity:0;fb:0;","ease":"Power3.easeInOut"},{"frame":"hover","speed":"200","ease":"Linear.easeNone","to":"o:1;rX:0;rY:0;rZ:0;z:0;fb:0;"}]' style="box-sizing:border-box;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;">
-                            <a href="<?php echo BASE_URL."page_check.php?page=login" ?>" class="btn-setting btn-hvr-setting-main btn-transparent2 " style="color: #ffffff;"> Login
-                                <span class="btn-hvr-setting btn-hvr-black">
+                                <a href="<?php echo BASE_URL."page_check.php?page=login" ?>" class="btn-setting btn-hvr-setting-main btn-blue btn-hvr">login
+                                    <span class="btn-hvr-setting">
 						     <span class="btn-hvr-setting-inner">
 							 <span class="btn-hvr-effect"></span>
                              <span class="btn-hvr-effect"></span>
@@ -177,8 +178,18 @@
                              <span class="btn-hvr-effect"></span>
                              </span>
                             </span>
-                            </a>
-                        </div>
+                                </a>
+                                <a href="<?php echo BASE_URL."page_check.php?page=register" ?>" class="btn-setting btn-hvr-setting-main btn-transparent3 btn-hvr">register
+                                    <span class="btn-hvr-setting btn-hvr-transparent">
+						     <span class="btn-hvr-setting-inner">
+							 <span class="btn-hvr-effect"></span>
+                             <span class="btn-hvr-effect"></span>
+                             <span class="btn-hvr-effect"></span>
+                             <span class="btn-hvr-effect"></span>
+                             </span>
+                            </span>
+                                </a>
+                            </div>
                     </li>
                 </ul>
             </div>

@@ -549,6 +549,15 @@ button:hover, button:active, button:focus {
     background-color: #f1c30f;
     color: #ffffff;
 }
+
+.btn-blue {
+    border-color: #355C7D ;
+    background-color: #355C7D ;
+    color: #ffffff;
+}
+
+
+
 .btn-white, .btn-white2 {
     background-color: #ffffff;
     color: #18191d;
@@ -2997,7 +3006,8 @@ header .fixed-menu.navbar-top-default .header-social a:hover {
 }
 /* page header */
 .page_header {
-    background: url(../images/page-tittle.jpg) no-repeat;
+    background: url(../images/404.jpg) no-repeat;
+    object-fit: cover;
 }
 .page_shop_header {
     background: url(../images/page-tittle-1.jpg) no-repeat;
@@ -3285,38 +3295,12 @@ ul.rounded li::before {
    Blog Pages ends
 ====================================== */
 
-.bg-img-1 {
-    background: url(../images/banner1.jpg) no-repeat;
-}
-.bg-img-2 {
-    background: url(../images/banner10.jpg) no-repeat;
-}
-.bg-img-3 {
-    background: url(../images/banner12.jpg) no-repeat;
-}
 .bg-img-4 {
     background: url(../images/three.jpg) no-repeat;
 }
-.bg-img-5 {
-    background: url(../images/banner22.jpg) no-repeat;
-}
-.bg-img-6 {
-    background: url(../images/banner23.jpg) no-repeat;
-}
-.bg-img-7 {
-    background: url(../images/banner25.jpg) no-repeat;
-}
-.bg-img-8 {
-    background: url(../images/banner26.jpg) no-repeat;
-}
+
 .bg-img-9 {
-    background: url(../images/banner33.jpg) no-repeat;
-}
-.bg-img-10 {
-    background: url(../images/banner36.jpg) no-repeat;
-}
-.bg-img-11 {
-    background: url(../images/banner37.jpg) no-repeat;
+    background: url(../images/lost.jpg) no-repeat;
 }
 
 .bg-img-setting {
@@ -3388,45 +3372,7 @@ ul.rounded li::before {
     margin: 1.4rem 0;
 }
 
-/* personal portfolio version */
-.myphoto {
-    height: 200px;
-    width: 200px;
-    position: relative;
-    display: inline-block;
-    border-radius: 50%;
-    overflow: hidden;
-}
-.myphoto:before {
-    content: " ";
-    border-radius: 50%;
-    border: 5px solid #ffffff;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}
-.personal-box h2{
-    font-size: 3rem;
-    margin-top: 30px;
-}
-.personal-box h3{
-    font-size: 2.2rem;
-    margin-top: .6rem;
-}
-/* particles.js container */
-.particles-version {
-    position: relative;
-}
-#particles-js {
-    position: relative;
-    width: 100%;
-    height: 450px;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00e0ce', endColorstr='#2989d8', GradientType=1);
-    overflow: hidden;
-}
-/* particles.js container */
+
 
 /* parallax images */
 .parallax1 {
@@ -3434,18 +3380,6 @@ ul.rounded li::before {
 }
 .parallax2 {
     background: url("../images/ecommerce.jpg");
-}
-.parallax3 {
-    background: url("../images/parallax3.jpg");
-}
-.parallax4 {
-    background: url("../images/parallax4.jpg");
-}
-.parallax5 {
-    background: url("../images/parallax5.jpg");
-}
-.parallax6 {
-    background: url("../images/parallax6.jpg");
 }
 /* parallax setting */
 .parallax-setting {
@@ -3458,36 +3392,6 @@ ul.rounded li::before {
     width: 100%;
 }
 
-/* ===================================
-   Single Portfolio parallax
-====================================== */
-.item-one {
-    background: url(../images/bg-single-1.jpg) no-repeat;
-}
-.item-two {
-    background: url(../images/bg-single-2.jpg) no-repeat;
-}
-.item-three {
-    background: url(../images/bg-single-3.jpg) no-repeat;
-}
-.item-four {
-    background: url(../images/bg-single-4.jpg) no-repeat;
-}
-.item-five {
-    background: url(../images/bg-single-5.jpg) no-repeat;
-}
-.item-six {
-    background: url(../images/bg-single-6.jpg) no-repeat;
-}
-.item-seven {
-    background: url(../images/bg-single-7.jpg) no-repeat;
-}
-.item-eight {
-    background: url(../images/bg-single-8.jpg) no-repeat;
-}
-.item-nine {
-    background: url(../images/bg-single-9.jpg) no-repeat;
-}
 
 .single-items {
     background-attachment: fixed;
@@ -3534,151 +3438,9 @@ ul.rounded li::before {
 .concept p, .planning p, .design p, .quality p{
     line-height: 25px;
 }
-/* features */
-.feature-item {
-    display: table;
-    margin: 30px 0;
-    max-width: 450px;
-    text-align: left;
-}
-.feature-item .icon {
-    padding-right: 15px;
-}
-.feature-item .d-table-cell:first-child {
-    width: 50px;
-}
-.feature-item .icon {
-    text-align: center;
-    position: relative;
-    z-index: 1;
-    font-size: 40px;
-}
-/* Tablet */
-.about-wrap {
-    position: relative;
-    overflow: hidden;
-}
-.about-wrap .about-bordered {
-    padding: 0 0 15% 15%;
-}
-.about-wrap .about-bordered img {
-    border: 20px solid #f6f6f6;
-}
-.about-wrap .about-bg-img-setting {
-    height: 65%;
-    width: 75%;
-    z-index: -1;
-    display: block;
-    left: 15px;
-    bottom: 0;
-    position: absolute;
-}
-/* about progressbar skills */
-.skill-box {
-    padding: 0 80px;
-}
-.skill-box .main-title h2 {
-    text-transform: initial;
-    max-width: 100%;
-}
-.skill-box .main-title p {
-    max-width: 100%;
-    margin: 0;
-}
-.progress {
-    height: 0.5rem;
-    margin-top: 1rem;
-}
-.detail-data{
-    color: #18191d;
-    margin-bottom: 2rem;
-}
-/* features 4 boxes */
-.process-box .pro-step {
-    -webkit-border-radius: 50%; -moz-border-radius: 50%; -ms-border-radius: 50%; border-radius: 50%;
-}
-.process-box {
-    background: #fff;
-    -webkit-box-shadow: 0 0 5px rgba(127, 123, 123, 0.1);
-    box-shadow: 0 0 5px rgba(127, 123, 123, 0.1);
-    -webkit-transition: all .5s ease-in;
-    -o-transition: all .5s ease-in;
-    transition: all .5s ease-in;
-    padding: 2.5rem 15px;
-    -webkit-border-radius: 0;
-    border-radius: 0;
-    text-align: center;
-}
-.process-box:hover {
-    -webkit-box-shadow: 0 0 20px -2px rgba(127, 123, 123, 0.5);
-    box-shadow: 0 0 20px -2px rgba(127, 123, 123, 0.5);
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-}
-.process-box .pro-step {
-    height: 90px;
-    width: 90px;
-    line-height: 94px;
-    font-size: 28px;
-    color: #fff;
-}
-/* services */
-.feature-box1 {
-    background: #ffffff;
-    text-align: center;
-    padding: 30px 15px;
-    transition: ease-in-out 0.3s;
-    -webkit-box-shadow: 0 0 10px #d1d1d1;
-    box-shadow: 0 0 10px #d1d1d1;
-}
-.feature-box1:hover {
-    transition: ease-in-out 0.3s;
-}
-.feature-box1 i {
-    font-size: 45px;
-}
-.feature-box1 h4 {
-    color: #18191d;
-    font-weight: normal;
-    text-transform: capitalize;
-    margin: 1rem 0;
-}
-.feature-box1 p {
-    margin-bottom: 1rem;
-}
-.feature-box1 a i {
-    font-size: 11px;
-    vertical-align: middle;
-}
-.feature-box1.hvr-bg-yellow i, .feature-box1.hvr-bg-yellow a {
-    color: #f1c30f;
-}
-.feature-box1.hvr-bg-pink i, .feature-box1.hvr-bg-pink a {
-    color: #ff1637;
-}
-.feature-box1.hvr-bg-black i, .feature-box1.hvr-bg-black a {
-    color: #18191d;
-}
-.feature-box1:hover a {
-    color: #ffffff;
-}
-.feature-box1:hover i, .feature-box1:hover h4, .feature-box1:hover p {
-    color: #ffffff;
-}
 
-/* Services Phone */
-.absolute-img-wrap .right-img {
-    right: 0;
-}
-.absolute-img-wrap .absolute-img {
-    width: auto;
-    max-width: 50%;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-    position: absolute;
-}
+
+
 /* ===================================
     Other Pages
 ====================================== */
@@ -3961,7 +3723,7 @@ ul.count_down.white li p:nth-child(2) {
     bottom: 0;
     left: 0;
     z-index: 111111;
-    background: #f1c30f;
+    background: #355C7D ;
     overflow: hidden !important;
 }
 .loading {
@@ -4023,12 +3785,12 @@ ul.count_down.white li p:nth-child(2) {
 }
 @-webkit-keyframes LOADINGREV {
     0% { -webkit-transform: scale(0.5); transform: scale(0.5); background: #ffffff; }
-    50% { -webkit-transform: scale(1); transform: scale(1); background: #f1c30f; }
+    50% { -webkit-transform: scale(1); transform: scale(1); background: #355C7D ; }
     100% { -webkit-transform: scale(0.5); transform: scale(0.5); background: #ffffff; }
 }
 @keyframes LOADINGREV {
     0% { -webkit-transform: scale(0.5); transform: scale(0.5); background: #ffffff; }
-    50% { -webkit-transform: scale(1); transform: scale(1); background: #f1c30f; }
+    50% { -webkit-transform: scale(1); transform: scale(1); background: #355C7D ; }
     100% { -webkit-transform: scale(0.5); transform: scale(0.5); background: #ffffff; }
 }
 /* ===================================

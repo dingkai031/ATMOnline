@@ -66,7 +66,6 @@ include_once("function/koneksi.php");
         
                             $_SESSION['user_id'] = $baris['user_id'];
                             $_SESSION['nama'] = $baris['name'];
-                            $_SESSION['level'] = $baris['level'];
                             $_SESSION['saldo'] = $baris['saldo'];
                             $_SESSION['email'] = $baris['email'];
                             $_SESSION['rek'] = $baris['rekening'];

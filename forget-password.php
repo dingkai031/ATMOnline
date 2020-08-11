@@ -1,14 +1,25 @@
-<?php include_once("function/helper.php"); 
+<?php
+//--------------------------------------------DAFTRA---------------------------------------------------------------
 
-    session_start();
+    include_once("function/helper.php");
+    include_once("function/koneksi.php");
 
-    $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : false;
 
-    if ($user_id) {
-        header('Refresh: 0.001; URL=http://localhost/newATM/personal.php');
-    } 
+    if (isset($_POST['konfirmasi'])) {
+        $email = $_POST['email'];
 
+        $query_email = mysqli_query($koneksi, "SELECT * FROM user WHERE email='$email'");
+
+        if (mysqli_fetch_assoc($query_email) == 0) {
+            ?> <script>alert("Invalid Email");</script> <?php
+            header('Refresh: 0.001; URL=http://localhost/newATM/page_check.php?page=forget-password');
+        }else {
+            ?> <script>alert("We will send your confirmation shortly");</script> <?php
+        }
+    }
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -19,7 +30,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>ATMOnline | Login</title>
+    <title>ATMOnline | Forget Password</title>
 
     <!-- Favicon -->
     <link rel="icon" href="images/favicon.png">
@@ -69,69 +80,36 @@
 <!-- Loader ends -->
 
     <!-- Login -->
-    <section class="p-lg-0 login-sec">
-    <div class="container-fluid">
-
-        <div class="row align-items-center">
-            <div class="col-lg-6 order-lg-2">
-                <div class="login-content">
-                    <div class="main-title d-inline-block mb-4 text-md-left">
-                        <h3 class="mb-3 color-black">Login</h3>
-                        <p>Access to the most powerful ATM in the web industry.</p>
-                    </div>
-                    <!--Alert-->
-                    <div class="alert alert-warning alert-dismissible fade show with-icon" role="alert">
-                        Please fill the following form with your information
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">×</span>
+<section class="p-0 center-block">
+    <h2 class="d-none">hidden</h2>
+    <div class="fullscreen bg-img-9 bg-img-setting">
+        <div class="col-xs-12 text-center center-col">
+            <div class="foget-password">
+                <!--Heading-->
+                <div class="main-title d-inline-block mb-4">
+                    <h3 class="mb-3 text-white">Pin or card Reset</h3>
+                    <p class="text-white">To reset your pin or retrieve your card, enter the email address you use to sign in to inform.</p>
+                </div>
+                <!--Form-->
+                <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="post">
+                    <input class="form-control mb-4" type="text" name="email" placeholder="E-mail Address" required="">
+                    <div class="form-button full-width">
+                        <button type="submit" class="btn-setting btn-hvr-setting-main btn-white btn-hvr text-capitalize" name="konfirmasi">Send Reset Link
+                            <span class="btn-hvr-setting btn-hvr-black">
+                                <span class="btn-hvr-setting-inner">
+                                    <span class="btn-hvr-effect"></span>
+                                    <span class="btn-hvr-effect"></span>
+                                    <span class="btn-hvr-effect"></span>
+                                    <span class="btn-hvr-effect"></span>
+                                </span>
+                            </span>
                         </button>
                     </div>
-
-                    <!--form-->
-                    <form action="<?php echo BASE_URL."proses_login.php" ?>" method="post">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" type="file" id="document" name="myfile" accept=".jpg,.png" required>
-                            <label class="custom-file-label" for="document">Insert your card</label>
-                        </div> 
-                        <div class="form-group" style="display:none">
-                            <label for="chunkSize">Chunk size in bytes</label>
-                            <input type="text" id="chunkSize"  value="1048576"/>
-                        </div>
-                        <div class="form-group" style="display:none">
-                            <label for="hash">Hash</label>
-                            <input type="text" id="hash" name="hasil_hash" />
-                        </div>
-                        <div style="margin-top:1em !important;">
-                            <input  type="password" name="password" placeholder="Pin" required="" maxlength="6" style="width:5em !important">
-                        </div>
-                        
-                        <div class="form-button mt-40px">
-                            <button type="submit" class="btn-setting btn-hvr-setting-main btn-yellow btn-hvr text-uppercase" id="submit_btn">Login
-                                <span class="btn-hvr-setting btn-hvr-pink">
-                                     <span class="btn-hvr-setting-inner">
-                                     <span class="btn-hvr-effect"></span>
-                                     <span class="btn-hvr-effect"></span>
-                                     <span class="btn-hvr-effect"></span>
-                                     <span class="btn-hvr-effect"></span>
-                                     </span>
-                                    </span>
-                            </button>
-                            <a href="forget-password.php">Lost card or forget pin?</a>
-                        </div>
-                    </form>
-
-                </div>
-            </div>
-            <div class="col-lg-6 d-none d-lg-block p-0">
-                <!--Feature Image Half-->
-                <img src="<?php echo BASE_URL."images/two.jpg"?>" class="about-img" alt="image">
+                </form>
             </div>
         </div>
-
-
     </div>
-</section>
-    <!-- Login ends -->
+</section>    <!-- Login ends -->
 
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -163,7 +141,6 @@
 <script src="js/wow.js"></script>
 
 
-
     <!--Revolution Slider-->
 <script src="js/revolution/jquery.themepunch.tools.min.js"></script>
 <script src="js/revolution/jquery.themepunch.revolution.min.js"></script>
@@ -182,12 +159,6 @@
 
 <!-- Custom JS File -->
 <script src="js/functions.js"></script>
-<script src="./crypto-js/crypto-js.js"></script>
-
-<script src="./index.js"></script>
-
-
-
 </body>
 </html>
 

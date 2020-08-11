@@ -12,7 +12,6 @@
         header('Refresh: 0.001; URL=http://localhost/newATM/index.php');
     }else {
         $nama = $_SESSION['nama'];
-        $level = $_SESSION['level']; 
         $saldo = $_SESSION['saldo']; 
         $email = $_SESSION['email']; 
         $rek = $_SESSION['rek'];
@@ -107,6 +106,11 @@
     $query_semua_nama_bank = mysqli_query($koneksi, "SELECT * FROM bank");
 ?>
 
+<?php 
+//--------------------------SEMUA DATA lembaga---------------
+    $query_semua_nama_Institution = mysqli_query($koneksi, "SELECT * FROM payment");
+?>
+
 
 <?php 
 //----------------------history transaksi---------------------------
@@ -123,7 +127,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>ATM Online</title>
+    <title>ATM Online | Personal </title>
 
     <!-- Favicon -->
     <link rel="icon" href="images/favicon.png">
@@ -255,10 +259,10 @@
         </div>
     </div>
     </section>
-    <!-- About ends -->
 
 
-    <section id="transfer" class="parallax-setting parallaxie parallax1" style="padding-top:240px !important;padding-bottom:240px !important;margin-top:0px !important; ">
+
+    <section id="transfer" class="parallax-setting parallaxie parallax1" style="padding-top:290px !important;padding-bottom:290px !important;margin-top:0px !important; ">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
@@ -277,15 +281,15 @@
                     <!--form-->
                     <form action="<?php echo $_SERVER["PHP_SELF"];?>" method="post" class="wow fadeInLeft" >
                         <div class="row">
-                            <div class="col-4">
-                                <input maxlength="3"  class="form-control" type="text" name="bank_code" placeholder="Bank Code" required="" value="<?php 
+                            <div class="col-3">
+                                <input style="text-align: center" maxlength="3"  class="form-control" type="text" name="bank_code" placeholder="Code" required="" value="<?php 
                                     if (isset($_POST['transfer'])) {if(!isset($bankcode_error)) { echo $bank_code_tujuan;}}   
                                 ?>" onkeypress='validate(event)'>
                                 <?php if(isset($bankcode_error)): ?>
                                     <span style="color:#ff1637 !important;font-size:14px;"><?php echo $bankcode_error; ?></span>
                                 <?php endif?>
                             </div>
-                            <div class="col">
+                            <div class="col" style="padding-left:0px">
                                 <input onkeypress="validate(event)" maxlength="20" class="form-control" type="text" name="rek" placeholder="Rek Num." required="" value="<?php if (isset($_POST['transfer'])) {if(!isset($rek_error)) { echo $rek_tujuan;}}?>">
                                 <?php if(isset($rek_error)): ?>
                                     <span style="color:#ff1637 !important; font-size:14px !important" ><?php echo $rek_error; ?></span>
@@ -381,9 +385,9 @@
 
     </div>
     </section>
-    <!-- Team ends -->
+    
 
-    <!-- transaction Starts -->
+    
     <section id="transaction" class="bg-light-gray" style="margin-bottom:50px !important;margin-top:0px !important;padding-bottom:0px !important">
         <div class="container-fluid">
             <div class="row">
@@ -414,10 +418,10 @@
             </div>
         </div>
     </section>
-    <!-- Work ends -->
+   
 
-    <!-- Pricing start -->
-    <section id="pay"  class="parallax-setting parallaxie parallax2" style="padding-bottom:380px !important;magrin-top:270px !important;">
+    
+    <section id="pay"  class="parallax-setting parallaxie parallax2" style="padding-bottom:290px !important;padding-top:290px !important;magrin-top:270px !important;">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
@@ -459,7 +463,35 @@
                                      </span>
                                     </span>
                             </button>
-                            <a href="#" style="color:#ff1637;">Institution code list </a>
+                            <a href="#" data-toggle="modal" data-target="#institutioncodelist" style="color:#ff1637"> Institution code list </a>
+                        </div>
+                        <div class="modal fade" id="institutioncodelist" role="dialog">
+                            <div class="modal-dialog">
+    
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+            
+                                        <?php 
+                                        echo "<table class='table' style='text-align:center !important;'>"; // start a table tag in the HTML
+                                        echo "<thead><tr><th scope='col'>Institution code</th><th scope='col'>Institution name</th><th scope='col'>Institution logo</th></tr></thead>";
+                                        echo "<tbody>";
+                                        
+                                        while($temp5 = mysqli_fetch_array($query_semua_nama_Institution)){   //Creates a loop to loop through results
+                                            echo "<tr><td>" . $temp5['codelembaga'] . "</td><td>" . $temp5['name'] . "</td><td><img src='". $temp5['link'] . "'></td></tr>" ;  //$row['index'] the index here is a field name
+                                        }
+                                        echo "</tbody>";
+                                        echo "</table>"; //Close the table in HTML
+                                        ?>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </form>
@@ -471,30 +503,27 @@
             </div>
         </div>
     </section>
-    <!-- Pricing ends -->
+  
 
 
 
 
-    <!-- Footer starts -->
+    
     <footer class="p-half bg-black2">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 col-sm-12 text-center">
                     <ul class="footer-icons mb-4">
-                        <li><a href="javascript:void(0)" class="wow fadeInUp"><i class="ti ti-facebook"></i> </a> </li>
-                        <li><a href="javascript:void(0)" class="wow fadeInDown"><i class="ti ti-twitter"></i> </a> </li>
-                        <li><a href="javascript:void(0)" class="wow fadeInUp"><i class="ti ti-google"></i> </a> </li>
-                        <li><a href="javascript:void(0)" class="wow fadeInDown"><i class="ti ti-linkedin"></i> </a> </li>
-                        <li><a href="https://instagram.com/yvnjlio" class="wow fadeInUp"><i class="ti ti-instagram"></i> </a> </li>
-                        <li><a href="javascript:void(0)" class="wow fadeInDown"><i class="ti ti-pinterest"></i> </a> </li>
+                    <li><a href="https://www.linkedin.com/in/yovan-adam-8780571a0/" class="wow fadeInUp"><i class="ti ti-facebook"></i> </a> </li>
+                    <li><a href="https://www.facebook.com/yovan.julio.adam/" class="wow fadeInDown"><i class="ti ti-linkedin"></i> </a> </li>
+                    <li><a href="https://instagram.com/yvnjlio" class="wow fadeInUp"><i class="ti ti-instagram"></i> </a> </li>
                     </ul>
                     <p class="copyrights mt-2 mb-2">© 2020 ATMOnline Made with brain by <a href="javascript:void(0)">Yovan Julio Adam</a></p>
                 </div>
             </div>
         </div>
     </footer>
-    <!-- Footer ends -->
+    
 
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
