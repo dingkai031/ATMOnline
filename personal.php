@@ -2,6 +2,7 @@
     session_start();
     include_once("function/helper.php");
     include_once("function/koneksi.php");
+    $tingkat = isset($_SESSION['level']) ? $_SESSION['level'] : false;
     
     
     
@@ -11,12 +12,17 @@
     if (!$user_id){
         header('Refresh: 0.001; URL=http://localhost/newATM/index.php');
     }else {
-        $nama = $_SESSION['nama'];
-        $saldo = $_SESSION['saldo']; 
-        $email = $_SESSION['email']; 
-        $rek = $_SESSION['rek'];
-        $bankcode = $_SESSION['bankcode'];
-        $linkpp = $_SESSION['link'];
+        if($tingkat == "admin") {
+            header('Refresh: 0.001; URL=http://localhost/newATM/admin.php');
+        }else {
+            $nama = $_SESSION['nama'];
+            $saldo = $_SESSION['saldo']; 
+            $email = $_SESSION['email']; 
+            $rek = $_SESSION['rek'];
+            $bankcode = $_SESSION['bankcode'];
+            $linkpp = $_SESSION['link'];
+        }
+        
     }
 ?>
 

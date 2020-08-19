@@ -4,16 +4,9 @@
     session_start();
 
     $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : false;
-    $tingkat = isset($_SESSION['level']) ? $_SESSION['level'] : false;
-    
 
     if ($user_id) {
-        if($tingkat == "admin") {
-            header('Refresh: 0.001; URL=http://localhost/newATM/admin.php');
-        }else {
-            header('Refresh: 0.001; URL=http://localhost/newATM/personal.php');
-            
-        }
+        header('Refresh: 0.001; URL=http://localhost/newATM/personal.php');
     } 
 
 ?>

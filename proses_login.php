@@ -63,19 +63,31 @@ include_once("function/koneksi.php");
                             $baris = mysqli_fetch_assoc($query);
                             
                             session_start();
+                            
+                            if ($baris['level'] == "admin") {
+                                $_SESSION['nama'] = $baris['name'];
+                                ?><script> alert("Selamat datang admin!");</script> 
+                                <?php
+                                header('Refresh: 0.001; URL=http://localhost/newATM/page_check.php?page=admin');
+
+                            }else {
+                                $_SESSION['user_id'] = $baris['user_id'];
+                                $_SESSION['nama'] = $baris['name'];
+                                $_SESSION['saldo'] = $baris['saldo'];
+                                $_SESSION['email'] = $baris['email'];
+                                $_SESSION['rek'] = $baris['rekening'];
+                                $_SESSION['bankcode'] = $baris['bankcode'];
+                                $_SESSION['link'] = $baris['link'];
+                                $_SESSION['level'] = $baris['level'];
+                                ?><script> alert("Selamat, Kartu anda terdaftar");</script> 
+                                <?php
+                                header('Refresh: 0.001; URL=http://localhost/newATM/page_check.php?page=personal');
+                            }
+
+                            
+
         
-                            $_SESSION['user_id'] = $baris['user_id'];
-                            $_SESSION['nama'] = $baris['name'];
-                            $_SESSION['saldo'] = $baris['saldo'];
-                            $_SESSION['email'] = $baris['email'];
-                            $_SESSION['rek'] = $baris['rekening'];
-                            $_SESSION['bankcode'] = $baris['bankcode'];
-                            $_SESSION['link'] = $baris['link'];
-        
-                            ?><script> alert("Selamat, Kartu anda terdaftar");</script> 
-                            <?php
-        
-                            header('Refresh: 0.001; URL=http://localhost/newATM/page_check.php?page=personal');
+                            
                         }
 
                         //$pin = $_POST['Ppin'];
